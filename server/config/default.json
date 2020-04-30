@@ -1,0 +1,4 @@
+{
+  "mongo": "mongodb+srv://Yauheni:XjbR@Hjeh!zD8rk@test-cluster-mcjtb.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "jwtSecretXjbR@Hjeh!zD8rk"
+}

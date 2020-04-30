@@ -2,6 +2,9 @@ const io = require("socket.io")();
 const express = require('express')
 const redis = require("redis");
 const promisify = require('util.promisify');
+const config = require('config')
+const path = require('path')
+const mongoose = require('mongoose')
 
 const app = express();
 const port = 4001;
@@ -21,32 +24,40 @@ for(let i = 0; i <= column; i++) {
   }
 }
 
+app.use(express.json({ extended: true }))
+
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/', require('./routes/newCell.routes'));
+
 io.on('connection', (client) => {
 
   client.on('get board', (response) => {
     const data = JSON.parse(response);
     io.sockets.emit('testing',  response)
+    console.log(`${data.row}${data.col}fill`)
     clientRedis.set(`${data.row}${data.col}fill`, 1);
     clientRedis.set(`${data.row}${data.col}color`, data.color);
   })
 
 });
 
-app.post('/', async(req, res)  => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  let array = []
-  for(let i = 0; i <= column; i++) {
-    array.push([])
-    for(let j = 0; j <= line; j++) {
-      array[i].push({
-        fill: await getAsync(`${i}${j}fill`),
-        color: await getAsync(`${i}${j}color`)
-      })
-    }
+(async () => {
+  try {
+    await mongoose.connect(config.get('mongo'), {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true
+    })
+    app.listen(expressPort);
+    io.listen(port);
+  } catch (error) {
+    console.log('Server Error', error.message)
+    process.exit(1)
   }
-  res.send(array);
-})
+})()
 
-io.listen(port);
-app.listen(expressPort);
 console.log('start');
+
+exports.getAsync = getAsync;
+exports.column = column;
+exports.line = line;
