@@ -1,0 +1,28 @@
+@import "~materialize-css/dist/css/materialize.min.css";
+
+.row {
+  margin-top: 150px;
+}
+.group-buttons {
+  display: flex;
+  width: 470px;
+  justify-content: space-between;
+  margin: 50px;
+  height: 50px;
+  background: #FFFFFF;
+  border-radius: 100px;
+  border-color: bisque;
+  padding: 6px;
+}
+.button {
+  border-radius: 100px;
+  width: 235px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 160%;
+  cursor: pointer;
+}
